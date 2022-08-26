@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+  </head>
+  <body>
+    <p>
+      <a
+        href="http://localhost:3000/auth/login?redirectTo=http://localhost:3000/add"
+        >Login</a
+      >
+    </p>
+    <form action="http://ocalhost:8080/planets" id="form-add">
+      <label>Name: <input type="text" name="name" /></label>
+      <label>Diameter: <input type="number" name="diameter" /></label>
+      <label>Moons: <input type="number" name="moons" /></label>
+      <input type="submit" value="Add planet" />
+    </form>
+    <script>
+      async function addPlanet(event) {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        const plainFormData = Object.fromEntries(formData.entries());
+        const formDataJsonString = JSON.stringify(plainFormData);
+        const url = form.action;
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: formDataJsonString,
+          credentials: "include",
+        });
+        const planet = await response.json();
+        console.dir(planets);
+      }
+      const addForm = document.getElementById("form-add");
+      addForm.addEventListener("submit", addPlanet);
+    </script>
+  </body>
+</html>
